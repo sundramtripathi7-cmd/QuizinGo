@@ -1,0 +1,152 @@
+.quiz-card {
+  background: white;
+  border: 1px solid #e9e7ef;
+  border-radius: 16px;
+  padding: 22px;
+  transition: 0.25s;
+}
+
+.quiz-card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 15px 35px rgba(30, 20, 70, 0.08);
+}
+
+.quiz-card-top {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 18px;
+}
+
+.quiz-icon {
+  width: 45px;
+  height: 45px;
+  border-radius: 12px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 21px;
+  background: #dff7f2;
+}
+
+.quiz-icon.blue {
+  background: #e9f2ff;
+}
+
+.quiz-icon.green {
+  background: #e8f8ef;
+}
+
+.quiz-icon.orange {
+  background: #fff1df;
+}
+
+.quiz-icon.pink {
+  background: #ffe9f1;
+}
+
+.quiz-category {
+  color: #777;
+  background: #f5f5f5;
+  padding: 5px 9px;
+  border-radius: 20px;
+  font-size: 10px;
+  font-weight: 600;
+}
+
+.quiz-card h3 {
+  font-size: 18px;
+  margin-bottom: 8px;
+}
+
+.quiz-description {
+  color: #888;
+  font-size: 12px;
+  line-height: 1.6;
+  min-height: 39px;
+}
+
+.quiz-info {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  border-top: 1px solid #eeeeee;
+  border-bottom: 1px solid #eeeeee;
+  margin: 18px 0;
+  padding: 13px 0;
+}
+
+.quiz-info div {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.quiz-info div:not(:last-child) {
+  border-right: 1px solid #eeeeee;
+}
+
+.quiz-info span {
+  color: #999;
+  font-size: 10px;
+}
+
+.quiz-info strong {
+  font-size: 13px;
+}
+
+.quiz-card-footer {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+}
+
+.teacher-info {
+  display: flex;
+  align-items: center;
+  gap: 7px;
+}
+
+.teacher-avatar {
+  width: 28px;
+  height: 28px;
+  background: #dff7f2;
+  color: #0f766e;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 11px;
+  font-weight: 700;
+}
+
+.teacher-info span {
+  color: #666;
+  font-size: 11px;
+}
+
+.start-quiz-btn {
+  text-decoration: none;
+  color: white;
+  background: #0f766e;
+  padding: 9px 12px;
+  border-radius: 8px;
+  font-size: 11px;
+  font-weight: 700;
+}
+
+.start-quiz-btn:hover {
+  background: #0b5a54;
+}
+
+@media (max-width: 500px) {
+  .quiz-card-footer {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .start-quiz-btn {
+    width: 100%;
+    text-align: center;
+  }
+}

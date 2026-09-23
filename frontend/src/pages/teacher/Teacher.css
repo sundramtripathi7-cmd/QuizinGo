@@ -1,0 +1,158 @@
+.teacher-heading {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 18px;
+}
+
+.teacher-heading h2 {
+  font-size: 18px;
+}
+
+.teacher-heading span {
+  color: #888;
+  font-size: 12px;
+}
+
+.teacher-quiz-list {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.teacher-quiz-item {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  padding: 16px;
+  border: 1px solid #eee;
+  border-radius: 14px;
+  background: #fafafa;
+}
+
+.teacher-quiz-icon {
+  width: 44px;
+  height: 44px;
+  border-radius: 12px;
+  background: #ecfdf5;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 20px;
+}
+
+.teacher-quiz-item strong {
+  display: block;
+  margin-bottom: 4px;
+}
+
+.teacher-quiz-item p {
+  color: #888;
+  font-size: 12px;
+}
+
+.teacher-quiz-item .danger-btn {
+  margin-left: auto;
+}
+
+.danger-btn {
+  border: 1px solid #fecaca;
+  background: #fff1f2;
+  color: #be123c;
+  border-radius: 8px;
+  padding: 8px 12px;
+  cursor: pointer;
+  font-size: 12px;
+  font-weight: 600;
+}
+
+.create-form {
+  margin: 0 35px 50px;
+  background: white;
+  border: 1px solid #e8e6ef;
+  border-radius: 18px;
+  padding: 28px;
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+}
+
+.create-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 14px;
+}
+
+.create-form label,
+.full-label {
+  display: flex;
+  flex-direction: column;
+  gap: 7px;
+  font-size: 13px;
+  font-weight: 600;
+  color: #444;
+}
+
+.create-form input,
+.create-form textarea {
+  padding: 12px 14px;
+  border: 1px solid #ddd;
+  border-radius: 10px;
+  font: inherit;
+  outline: none;
+}
+
+.create-form input:focus,
+.create-form textarea:focus {
+  border-color: #0f766e;
+  box-shadow: 0 0 0 3px rgba(15, 118, 110, 0.12);
+}
+
+.questions-block {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  margin-top: 8px;
+}
+
+.question-editor {
+  border: 1px solid #eee;
+  border-radius: 14px;
+  padding: 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  background: #fafafa;
+}
+
+.question-editor-top {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.option-editor-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 10px;
+}
+
+@media (max-width: 800px) {
+  .create-form {
+    margin: 0 20px 40px;
+  }
+
+  .create-grid,
+  .option-editor-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .teacher-quiz-item {
+    flex-wrap: wrap;
+  }
+
+  .teacher-quiz-item .danger-btn {
+    margin-left: 0;
+    width: 100%;
+  }
+}
