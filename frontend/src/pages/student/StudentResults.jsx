@@ -74,9 +74,14 @@ function StudentResults() {
                     <small>{item.category}</small>
                   </div>
                   <span>
-                    {item.score}/{item.totalQuestions}
+                    {item.score}/{item.maxScore} marks
                   </span>
-                  <span className="pct">{item.percentage}%</span>
+                  <span className="pct">
+                    {item.percentage}%{" "}
+                    <span className={item.passed ? "pass-tag" : "fail-tag"}>
+                      {item.passed ? "Passed" : "Failed"}
+                    </span>
+                  </span>
                   <span>
                     {new Date(item.createdAt).toLocaleDateString("en-GB", {
                       day: "2-digit",

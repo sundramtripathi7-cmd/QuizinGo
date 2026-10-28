@@ -1,19 +1,7 @@
 const mongoose = require("mongoose");
+const { questionFields } = require("./questionFields");
 
-const questionSchema = new mongoose.Schema(
-  {
-    question: { type: String, required: true },
-    options: {
-      type: [String],
-      validate: {
-        validator: (value) => Array.isArray(value) && value.length >= 2,
-        message: "Each question needs at least 2 options",
-      },
-    },
-    answer: { type: String, required: true },
-  },
-  { _id: true }
-);
+const questionSchema = new mongoose.Schema(questionFields, { _id: true });
 
 const quizSchema = new mongoose.Schema(
   {
@@ -34,17 +22,24 @@ const quizSchema = new mongoose.Schema(
       required: true,
     },
     teacherName: { type: String, default: "Teacher" },
+    classroom: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "Classroom",
+      default: null,
+      index: true,
+    },
     questions: { type: [questionSchema], default: [] },
     isPublished: { type: Boolean, default: true },
+
+    attemptsAllowed: { type: Number, default: 0, min: 0 },
+    shuffleQuestions: { type: Boolean, default: false },
+    shuffleAnswers: { type: Boolean, default: true },
+    passPercentage: { type: Number, default: 40, min: 0, max: 100 },
+    showCorrectAnswers: { type: Boolean, default: true },
+    openAt: { type: Date, default: null },
+    closeAt: { type: Date, default: null },
   },
   { timestamps: true }
 );
-
-quizSchema.virtual("questionCount").get(function questionCount() {
-  return this.questions.length;
-});
-
-quizSchema.set("toJSON", { virtuals: true });
-quizSchema.set("toObject", { virtuals: true });
 
 module.exports = mongoose.model("Quiz", quizSchema);

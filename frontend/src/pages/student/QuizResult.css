@@ -121,8 +121,8 @@
   height: 145px;
   border-radius: 50%;
   background: conic-gradient(
-    #0f766e 0% 86%,
-    #eceaf2 86% 100%
+    #0f766e 0deg var(--pct, 0deg),
+    #e6efec var(--pct, 0deg) 360deg
   );
   display: flex;
   align-items: center;
@@ -497,5 +497,122 @@
   .dashboard-btn {
     text-align: center;
     width: 100%;
+  }
+}
+/* ---------- partial credit, pass/fail ---------- */
+
+.result-check.not-passed {
+  background: #fff7ed;
+  color: #c2410c;
+}
+
+.pass-tag,
+.fail-tag {
+  display: inline-block;
+  padding: 4px 10px;
+  border-radius: 999px;
+  font-size: 11px;
+  font-weight: 700;
+}
+
+.pass-tag {
+  background: #e6f7ed;
+  color: #1f7a45;
+}
+
+.fail-tag {
+  background: #ffe8e8;
+  color: #c43c3c;
+}
+
+.result-stat.partial .result-stat-icon {
+  background: #fff4e0;
+  color: #c47a12;
+}
+
+.review-number.partial {
+  background: #fff4e0;
+  color: #c47a12;
+}
+
+.answer-partial,
+.status-partial {
+  color: #c47a12;
+}
+
+.status-partial {
+  font-size: 10px;
+  font-weight: 700;
+}
+
+.review-meta {
+  display: flex;
+  gap: 10px;
+  font-size: 10px;
+  color: #8a9996;
+  font-weight: 600;
+  margin-bottom: 4px;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+}
+
+.answer-pairs {
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.review-feedback {
+  margin-top: 8px;
+  padding: 8px 10px;
+  border-radius: 8px;
+  background: #f3faf8;
+  color: #3f5f5a;
+  font-size: 11px;
+  line-height: 1.5;
+}
+
+.review-filters {
+  display: flex;
+  gap: 6px;
+  flex-wrap: wrap;
+  justify-content: flex-end;
+}
+
+.review-filters button {
+  border: 1px solid #dce6e2;
+  background: white;
+  border-radius: 999px;
+  padding: 5px 10px;
+  font-size: 11px;
+  font-weight: 600;
+  color: #5f6f6f;
+  cursor: pointer;
+  font-family: inherit;
+}
+
+.review-filters button.active {
+  background: #0f766e;
+  border-color: #0f766e;
+  color: white;
+}
+
+.review-empty {
+  padding: 20px;
+  text-align: center;
+  color: #8a9996;
+  font-size: 12px;
+}
+
+@media (max-width: 700px) {
+  .review-heading {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 12px;
+  }
+
+  .review-filters {
+    justify-content: flex-start;
   }
 }

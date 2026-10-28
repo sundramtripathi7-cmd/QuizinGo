@@ -182,13 +182,13 @@
 }
 
 .answer-option:hover {
-  border-color: #a99cf5;
-  background: #fbfaff;
+  border-color: #7dd3c0;
+  background: #f6fcfa;
 }
 
 .answer-option.selected {
   border-color: #0f766e;
-  background: #f4f1ff;
+  background: #ecfdf8;
 }
 
 .option-letter {
@@ -215,7 +215,7 @@
 }
 
 .answer-option.selected .option-text {
-  color: #4f37c4;
+  color: #0b5a54;
   font-weight: 600;
 }
 
@@ -271,7 +271,7 @@
 }
 
 .next-btn:hover {
-  background: #5940d8;
+  background: #0b5a54;
 }
 
 .submit-small {
@@ -335,8 +335,8 @@
 }
 
 .palette-number.answered {
-  background: #e9e5ff;
-  border-color: #d3ccff;
+  background: #d5f5ec;
+  border-color: #a7e3d4;
   color: #0f766e;
 }
 
@@ -372,8 +372,8 @@
 }
 
 .legend-box.answered {
-  background: #e9e5ff;
-  border-color: #d3ccff;
+  background: #d5f5ec;
+  border-color: #a7e3d4;
 }
 
 .legend-box.current {
@@ -400,7 +400,7 @@
 }
 
 .submit-btn:hover {
-  background: #5940d8;
+  background: #0b5a54;
 }
 
 .submit-container p {
@@ -416,7 +416,7 @@
 .modal-overlay {
   position: fixed;
   inset: 0;
-  background: rgba(20, 15, 40, 0.55);
+  background: rgba(16, 42, 42, 0.55);
   display: flex;
   align-items: center;
   justify-content: center;
@@ -544,5 +544,185 @@
 
   .palette-grid {
     grid-template-columns: repeat(5, 1fr);
+  }
+}
+/* ---------- question types ---------- */
+
+.question-meta {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 14px;
+  color: #7a8a87;
+  font-size: 12px;
+  font-weight: 600;
+}
+
+.q-type-pill {
+  background: #dff7f2;
+  color: #0b5a54;
+  padding: 4px 10px;
+  border-radius: 999px;
+  font-size: 11px;
+  font-weight: 700;
+}
+
+.answer-option.multi .option-letter {
+  border-radius: 6px;
+}
+
+.options-list.tf {
+  flex-direction: row;
+}
+
+.options-list.tf .answer-option {
+  flex: 1;
+}
+
+.text-answer {
+  width: 100%;
+  max-width: 480px;
+  padding: 15px 17px;
+  border: 1px solid #d5dfdb;
+  border-radius: 11px;
+  font: inherit;
+  font-size: 16px;
+  outline: none;
+}
+
+.text-answer:focus {
+  border-color: #0f766e;
+  box-shadow: 0 0 0 3px rgba(15, 118, 110, 0.12);
+}
+
+.matching-list {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.matching-row {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto minmax(0, 1fr);
+  align-items: center;
+  gap: 12px;
+  padding: 12px 14px;
+  border: 1px solid #e4e4e8;
+  border-radius: 11px;
+}
+
+.matching-prompt {
+  font-weight: 600;
+  font-size: 14px;
+}
+
+.matching-arrow {
+  color: #9aa9a6;
+  font-weight: 700;
+}
+
+.matching-row select {
+  padding: 10px 12px;
+  border: 1px solid #d5dfdb;
+  border-radius: 9px;
+  font: inherit;
+  font-size: 14px;
+  background: white;
+  outline: none;
+}
+
+.matching-row select.chosen {
+  border-color: #0f766e;
+  background: #ecfdf8;
+}
+
+.clear-answer {
+  margin-top: 16px;
+  border: none;
+  background: none;
+  color: #7a8a87;
+  font-size: 12px;
+  font-weight: 600;
+  text-decoration: underline;
+  cursor: pointer;
+  font-family: inherit;
+}
+
+.save-indicator {
+  font-size: 11px;
+  color: #7a8a87;
+}
+
+.save-indicator.saved {
+  color: #3c9661;
+}
+
+.save-indicator.error {
+  color: #dc4040;
+}
+
+.quiz-timer.no-limit {
+  background: #f1f5f4;
+  color: #5f6f6f;
+  font-size: 12px;
+}
+
+.resume-banner {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  margin-bottom: 16px;
+  padding: 11px 14px;
+  border-radius: 11px;
+  background: #ecfdf5;
+  border: 1px solid #a7f3d0;
+  color: #047857;
+  font-size: 13px;
+}
+
+.resume-banner button {
+  border: none;
+  background: none;
+  color: inherit;
+  cursor: pointer;
+}
+
+.blocked-icon {
+  width: 56px;
+  height: 56px;
+  border-radius: 50%;
+  background: #fff7ed;
+  color: #c2410c;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 26px;
+  font-weight: 800;
+}
+
+.blocked-message {
+  max-width: 420px;
+  text-align: center;
+  font-size: 15px;
+  color: #3f4f4f;
+}
+
+.blocked-actions {
+  display: flex;
+  gap: 10px;
+}
+
+@media (max-width: 650px) {
+  .matching-row {
+    grid-template-columns: 1fr;
+  }
+
+  .matching-arrow {
+    display: none;
+  }
+
+  .save-indicator {
+    display: none;
   }
 }

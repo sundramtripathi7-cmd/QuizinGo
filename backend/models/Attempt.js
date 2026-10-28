@@ -12,26 +12,27 @@ const attemptSchema = new mongoose.Schema(
       ref: "User",
       required: true,
     },
-    answers: {
-      type: Map,
-      of: String,
-      default: {},
+    status: {
+      type: String,
+      enum: ["in_progress", "submitted"],
+      default: "submitted",
     },
+    startedAt: { type: Date, default: Date.now },
+    deadline: { type: Date, default: null },
+    submittedAt: { type: Date, default: null },
+    // Per-question display order fixed at start so shuffles survive page reloads.
+    layout: { type: mongoose.Schema.Types.Mixed, default: [] },
+    answers: { type: mongoose.Schema.Types.Mixed, default: {} },
     score: { type: Number, default: 0 },
+    maxScore: { type: Number, default: 0 },
     totalQuestions: { type: Number, default: 0 },
     percentage: { type: Number, default: 0 },
-    review: [
-      {
-        questionId: String,
-        question: String,
-        options: [String],
-        correctAnswer: String,
-        userAnswer: String,
-        isCorrect: Boolean,
-      },
-    ],
+    passed: { type: Boolean, default: false },
+    review: { type: [mongoose.Schema.Types.Mixed], default: [] },
   },
-  { timestamps: true }
+  { timestamps: true, minimize: false }
 );
+
+attemptSchema.index({ quiz: 1, student: 1, status: 1 });
 
 module.exports = mongoose.model("Attempt", attemptSchema);

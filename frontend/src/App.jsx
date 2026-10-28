@@ -16,6 +16,11 @@ import StudentProfile from "./pages/student/StudentProfile";
 
 import TeacherDashboard from "./pages/teacher/TeacherDashboard";
 import CreateQuiz from "./pages/teacher/CreateQuiz";
+import QuestionBank from "./pages/teacher/QuestionBank";
+import QuizAttempts from "./pages/teacher/QuizAttempts";
+import TeacherClasses from "./pages/teacher/TeacherClasses";
+import ClassDetail from "./pages/teacher/ClassDetail";
+import StudentClasses from "./pages/student/StudentClasses";
 
 function App() {
   return (
@@ -49,6 +54,15 @@ function App() {
             element={
               <ProtectedRoute roles={["student"]}>
                 <StudentDashboard />
+              </ProtectedRoute>
+            }
+          />
+
+          <Route
+            path="/student/classes"
+            element={
+              <ProtectedRoute roles={["student"]}>
+                <StudentClasses />
               </ProtectedRoute>
             }
           />
@@ -99,10 +113,55 @@ function App() {
           />
 
           <Route
+            path="/teacher/classes"
+            element={
+              <ProtectedRoute roles={["teacher"]}>
+                <TeacherClasses />
+              </ProtectedRoute>
+            }
+          />
+
+          <Route
+            path="/teacher/classes/:id"
+            element={
+              <ProtectedRoute roles={["teacher"]}>
+                <ClassDetail />
+              </ProtectedRoute>
+            }
+          />
+
+          <Route
             path="/teacher/create"
             element={
               <ProtectedRoute roles={["teacher"]}>
                 <CreateQuiz />
+              </ProtectedRoute>
+            }
+          />
+
+          <Route
+            path="/teacher/edit/:id"
+            element={
+              <ProtectedRoute roles={["teacher"]}>
+                <CreateQuiz key="edit" />
+              </ProtectedRoute>
+            }
+          />
+
+          <Route
+            path="/teacher/bank"
+            element={
+              <ProtectedRoute roles={["teacher"]}>
+                <QuestionBank />
+              </ProtectedRoute>
+            }
+          />
+
+          <Route
+            path="/teacher/quiz/:id/results"
+            element={
+              <ProtectedRoute roles={["teacher"]}>
+                <QuizAttempts />
               </ProtectedRoute>
             }
           />

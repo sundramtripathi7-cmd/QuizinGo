@@ -3,6 +3,66 @@ require("dotenv").config();
 const connectDB = require("./config/db");
 const User = require("./models/User");
 const Quiz = require("./models/Quiz");
+const Attempt = require("./models/Attempt");
+const Question = require("./models/Question");
+const Classroom = require("./models/Classroom");
+
+const questionTypesDemo = {
+  title: "Moodle Question Types Demo",
+  category: "General",
+  description: "One of each question type: multiple choice, multiple answer, true/false, short answer, numerical and matching.",
+  duration: 15,
+  icon: "🧩",
+  color: "green",
+  attemptsAllowed: 3,
+  shuffleAnswers: true,
+  passPercentage: 50,
+  questions: [
+    {
+      type: "mcq",
+      question: "Which planet is known as the Red Planet?",
+      options: ["Venus", "Mars", "Jupiter", "Mercury"],
+      answer: "Mars",
+      feedback: "Iron oxide on its surface gives Mars its red colour.",
+    },
+    {
+      type: "multi",
+      question: "Which of these are prime numbers? (select all that apply)",
+      options: ["2", "9", "11", "15", "17"],
+      answer: ["2", "11", "17"],
+      marks: 2,
+    },
+    {
+      type: "truefalse",
+      question: "The Pacific is the largest ocean on Earth.",
+      options: ["True", "False"],
+      answer: "True",
+    },
+    {
+      type: "shortanswer",
+      question: "Who wrote the play 'Romeo and Juliet'?",
+      answer: ["Shakespeare", "William Shakespeare", "*Shakespeare"],
+      feedback: "William Shakespeare wrote it around 1595.",
+    },
+    {
+      type: "numerical",
+      question: "What is the value of pi to two decimal places?",
+      answer: 3.14,
+      tolerance: 0.01,
+    },
+    {
+      type: "matching",
+      question: "Match each country with its capital.",
+      pairs: [
+        { prompt: "India", match: "New Delhi" },
+        { prompt: "Japan", match: "Tokyo" },
+        { prompt: "France", match: "Paris" },
+        { prompt: "Egypt", match: "Cairo" },
+      ],
+      marks: 2,
+    },
+  ],
+};
 
 const sampleQuizzes = [
   {
@@ -226,7 +286,10 @@ const seed = async () => {
   try {
     await connectDB();
 
+    await Attempt.deleteMany({});
+    await Question.deleteMany({});
     await Quiz.deleteMany({});
+    await Classroom.deleteMany({});
     await User.deleteMany({});
 
     const teacher = await User.create({
@@ -236,26 +299,62 @@ const seed = async () => {
       role: "teacher",
     });
 
-    await User.create({
+    const student = await User.create({
       name: "Sundram",
       email: "student@quizingo.com",
       password: "student123",
       role: "student",
     });
 
-    const quizzes = sampleQuizzes.map((quiz) => ({
+    const [cseClass, javaClass] = await Classroom.insertMany([
+      {
+        name: "B.Tech CSE · Semester 5",
+        description: "Core computer science subjects for semester 5.",
+        icon: "🎓",
+        color: "",
+        teacher: teacher._id,
+        teacherName: teacher.name,
+        code: "CSE5QZ",
+        students: [student._id],
+      },
+      {
+        name: "Java Workshop",
+        description: "Weekend workshop on Java and OOP. Join with the class code.",
+        icon: "☕",
+        color: "orange",
+        teacher: teacher._id,
+        teacherName: teacher.name,
+        code: "JAVA24",
+        students: [],
+      },
+    ]);
+
+    const quizzes = [questionTypesDemo, ...sampleQuizzes].map((quiz) => ({
       ...quiz,
-      marks: quiz.questions.length,
+      questions: quiz.questions.map((q) => ({ type: "mcq", marks: 1, ...q })),
+      marks: quiz.questions.reduce((sum, q) => sum + (q.marks || 1), 0),
       teacher: teacher._id,
       teacherName: teacher.name,
+      classroom: quiz.title === "Java Programming" ? javaClass._id : cseClass._id,
       isPublished: true,
     }));
 
     await Quiz.insertMany(quizzes);
 
+    await Question.insertMany(
+      questionTypesDemo.questions.map((q) => ({
+        type: "mcq",
+        marks: 1,
+        ...q,
+        teacher: teacher._id,
+        category: "General Knowledge",
+      }))
+    );
+
     console.log("Seed complete");
     console.log("Teacher: teacher@quizingo.com / teacher123");
     console.log("Student: student@quizingo.com / student123");
+    console.log("Class codes: CSE5QZ (student enrolled), JAVA24 (not enrolled)");
     process.exit(0);
   } catch (error) {
     console.error("Seed failed:", error.message);

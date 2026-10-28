@@ -1,11 +1,15 @@
 const express = require("express");
 const cors = require("cors");
+const multer = require("multer");
 require("dotenv").config();
 
 const connectDB = require("./config/db");
 const authRoutes = require("./routes/authRoutes");
 const quizRoutes = require("./routes/quizRoutes");
 const attemptRoutes = require("./routes/attemptRoutes");
+const bankRoutes = require("./routes/bankRoutes");
+const importRoutes = require("./routes/importRoutes");
+const classroomRoutes = require("./routes/classroomRoutes");
 
 const app = express();
 
@@ -24,10 +28,18 @@ app.get("/", (req, res) => {
 app.use("/api/auth", authRoutes);
 app.use("/api/quizzes", quizRoutes);
 app.use("/api/attempts", attemptRoutes);
+app.use("/api/questions", bankRoutes);
+app.use("/api/import", importRoutes);
+app.use("/api/classes", classroomRoutes);
 
 app.use((err, req, res, next) => {
+  if (err instanceof multer.MulterError) {
+    const message =
+      err.code === "LIMIT_FILE_SIZE" ? "File is too large (max 10 MB)" : err.message;
+    return res.status(400).json({ message });
+  }
   console.error(err);
-  res.status(500).json({ message: err.message || "Server error" });
+  return res.status(500).json({ message: err.message || "Server error" });
 });
 
 const PORT = process.env.PORT || 5000;

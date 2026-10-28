@@ -1,14 +1,20 @@
-import { useEffect, useMemo, useState } from "react";
+import { useCallback, useEffect, useMemo, useState } from "react";
+import { Link, useSearchParams } from "react-router-dom";
 import Sidebar from "../../components/Sidebar";
 import QuizCard from "../../components/QuizCard";
+import JoinClassForm from "../../components/JoinClassForm";
 import { useAuth } from "../../context/AuthContext";
 import { api } from "../../api";
 import "./StudentDashboard.css";
+import "../../components/Classes.css";
 
 function StudentDashboard() {
   const { user } = useAuth();
+  const [searchParams, setSearchParams] = useSearchParams();
+  const classFilter = searchParams.get("class") || "";
   const [search, setSearch] = useState("");
   const [quizzes, setQuizzes] = useState([]);
+  const [classes, setClasses] = useState([]);
   const [stats, setStats] = useState({
     totalQuizzes: 0,
     completed: 0,
@@ -18,14 +24,15 @@ function StudentDashboard() {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
 
-  useEffect(() => {
+  const load = useCallback(() => {
     let active = true;
 
-    Promise.all([api.getQuizzes(), api.getStudentStats()])
-      .then(([quizData, statsData]) => {
+    Promise.all([api.getQuizzes(), api.getStudentStats(), api.getClasses()])
+      .then(([quizData, statsData, classData]) => {
         if (!active) return;
         setQuizzes(quizData.quizzes || []);
-        setStats(statsData.stats || stats);
+        setStats((previous) => statsData.stats || previous);
+        setClasses(classData.classes || []);
       })
       .catch((err) => {
         if (active) setError(err.message);
@@ -39,14 +46,20 @@ function StudentDashboard() {
     };
   }, []);
 
+  useEffect(() => load(), [load]);
+
+  const selectClass = (id) => setSearchParams(id ? { class: id } : {}, { replace: true });
+
   const filteredQuizzes = useMemo(
     () =>
-      quizzes.filter((quiz) =>
-        `${quiz.title} ${quiz.category}`
-          .toLowerCase()
-          .includes(search.toLowerCase())
+      quizzes.filter(
+        (quiz) =>
+          (!classFilter || quiz.classroom?.id === classFilter) &&
+          `${quiz.title} ${quiz.category} ${quiz.classroom?.name || ""}`
+            .toLowerCase()
+            .includes(search.toLowerCase())
       ),
-    [quizzes, search]
+    [quizzes, search, classFilter]
   );
 
   const today = new Date().toLocaleDateString("en-GB", {
@@ -158,6 +171,41 @@ function StudentDashboard() {
           {loading && <div className="panel-message">Loading quizzes...</div>}
           {error && <div className="panel-message error">{error}</div>}
 
+          {!loading && !error && classes.length > 1 && (
+            <div className="class-filter">
+              <button type="button" className={classFilter ? "" : "active"} onClick={() => selectClass("")}>
+                All classes
+              </button>
+              {classes.map((item) => (
+                <button
+                  type="button"
+                  key={item.id}
+                  className={classFilter === item.id ? "active" : ""}
+                  onClick={() => selectClass(item.id)}
+                >
+                  {item.icon} {item.name}
+                </button>
+              ))}
+            </div>
+          )}
+
+          {!loading && !error && classes.length === 0 && (
+            <div className="no-quizzes">
+              <div>🎓</div>
+              <h3>Join a class to see quizzes</h3>
+              <p>Your teacher shares quizzes with a class. Enter the class code below.</p>
+              <div className="join-empty">
+                <JoinClassForm
+                  compact
+                  onJoined={() => {
+                    setLoading(true);
+                    load();
+                  }}
+                />
+              </div>
+            </div>
+          )}
+
           {!loading && !error && filteredQuizzes.length > 0 && (
             <div className="quiz-grid">
               {filteredQuizzes.map((quiz) => (
@@ -166,11 +214,16 @@ function StudentDashboard() {
             </div>
           )}
 
-          {!loading && !error && filteredQuizzes.length === 0 && (
+          {!loading && !error && classes.length > 0 && filteredQuizzes.length === 0 && (
             <div className="no-quizzes">
               <div>⌕</div>
               <h3>No quizzes found</h3>
-              <p>Try searching with a different keyword.</p>
+              <p>
+                {search
+                  ? "Try searching with a different keyword."
+                  : "Your teacher hasn't published a quiz here yet. "}
+                {!search && <Link to="/student/classes">Join another class</Link>}
+              </p>
             </div>
           )}
         </section>

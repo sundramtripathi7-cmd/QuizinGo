@@ -17,8 +17,8 @@ const userSchema = new mongoose.Schema(
     },
     password: {
       type: String,
-      required: true,
       minlength: 6,
+      default: undefined,
     },
     role: {
       type: String,
@@ -30,12 +30,13 @@ const userSchema = new mongoose.Schema(
 );
 
 userSchema.pre("save", async function hashPassword(next) {
-  if (!this.isModified("password")) return next();
+  if (!this.isModified("password") || !this.password) return next();
   this.password = await bcrypt.hash(this.password, 10);
   next();
 });
 
 userSchema.methods.matchPassword = function matchPassword(enteredPassword) {
+  if (!this.password) return Promise.resolve(false);
   return bcrypt.compare(enteredPassword, this.password);
 };
 

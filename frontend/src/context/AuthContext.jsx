@@ -5,14 +5,12 @@ const AuthContext = createContext(null);
 
 export function AuthProvider({ children }) {
   const [user, setUser] = useState(null);
-  const [loading, setLoading] = useState(true);
+  const [loading, setLoading] = useState(() =>
+    Boolean(localStorage.getItem("quizingo_token"))
+  );
 
   useEffect(() => {
-    const token = localStorage.getItem("quizingo_token");
-    if (!token) {
-      setLoading(false);
-      return;
-    }
+    if (!localStorage.getItem("quizingo_token")) return;
 
     api
       .me()
@@ -24,19 +22,19 @@ export function AuthProvider({ children }) {
       .finally(() => setLoading(false));
   }, []);
 
-  const login = async (email, password) => {
-    const data = await api.login({ email, password });
+  const applySession = (data) => {
     localStorage.setItem("quizingo_token", data.token);
     setUser(data.user);
     return data.user;
   };
 
-  const register = async (payload) => {
-    const data = await api.register(payload);
-    localStorage.setItem("quizingo_token", data.token);
-    setUser(data.user);
-    return data.user;
-  };
+  const login = async (email, password) => applySession(await api.login({ email, password }));
+
+  const requestOtp = (payload) => api.requestOtp(payload);
+
+  const verifyOtp = async (payload) => applySession(await api.verifyOtp(payload));
+
+  const register = async (payload) => applySession(await api.register(payload));
 
   const logout = () => {
     localStorage.removeItem("quizingo_token");
@@ -44,12 +42,13 @@ export function AuthProvider({ children }) {
   };
 
   return (
-    <AuthContext.Provider value={{ user, loading, login, register, logout }}>
+    <AuthContext.Provider value={{ user, loading, login, register, logout, requestOtp, verifyOtp }}>
       {children}
     </AuthContext.Provider>
   );
 }
 
+// eslint-disable-next-line react-refresh/only-export-components
 export function useAuth() {
   const context = useContext(AuthContext);
   if (!context) {

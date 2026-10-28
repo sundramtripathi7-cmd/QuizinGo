@@ -1,5 +1,7 @@
 const express = require("express");
 const {
+  startAttempt,
+  saveAnswers,
   submitAttempt,
   getMyAttempts,
   getAttemptById,
@@ -8,8 +10,12 @@ const { protect, authorize } = require("../middleware/auth");
 
 const router = express.Router();
 
-router.get("/mine", protect, authorize("student"), getMyAttempts);
-router.get("/:id", protect, authorize("student"), getAttemptById);
-router.post("/:id/submit", protect, authorize("student"), submitAttempt);
+router.use(protect, authorize("student"));
+
+router.get("/mine", getMyAttempts);
+router.post("/start/:quizId", startAttempt);
+router.put("/:id/answers", saveAnswers);
+router.post("/:id/submit", submitAttempt);
+router.get("/:id", getAttemptById);
 
 module.exports = router;

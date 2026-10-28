@@ -16,13 +16,16 @@ function Sidebar({ role = "student" }) {
   const studentLinks = [
     { to: "/student", label: "Dashboard", end: true },
     { to: "/student/quizzes", label: "Available Quizzes" },
+    { to: "/student/classes", label: "My Classes" },
     { to: "/student/results", label: "My Results" },
     { to: "/student/profile", label: "Profile" },
   ];
 
   const teacherLinks = [
     { to: "/teacher", label: "Dashboard", end: true },
+    { to: "/teacher/classes", label: "My Classes" },
     { to: "/teacher/create", label: "Create Quiz" },
+    { to: "/teacher/bank", label: "Question Bank" },
   ];
 
   const links = role === "teacher" ? teacherLinks : studentLinks;
